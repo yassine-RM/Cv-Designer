@@ -33,7 +33,7 @@ class UserRequest extends FormRequest
             'Paye' => 'required',
             'DateNaissance' => 'required',
             'Photo' => 'required',
-            'Telephonne' => 'required|max:10|min:10',
+            'Telephonne' => 'required|max:10|min:9',
             'Email' => 'required|email|unique:users',
             'Password' => 'required|min:8|max:30|confirmed',
             'Password_confirmation' => 'required_with:Password|same:Password|min:8',

@@ -29,7 +29,7 @@ class ExperienceController extends Controller
     }
     public function getExperiences($id)
     {
-        $Experiences = Experience::where(['cv_id' => $id])->orderby('dateFin','desc')->get();
+        $Experiences = Experience::where(['cv_id' => $id])->orderby('dateFin', 'desc')->get();
 
         return response()->json(['etat' => true, 'Experiences' => $Experiences]);
     }
@@ -38,7 +38,6 @@ class ExperienceController extends Controller
         $Experience = Experience::find($id);
         $Experience->delete();
         return response()->json(['etat' => true]);
-
     }
     public function updateExperience($id, ExperienceRequest $request)
     {
@@ -56,6 +55,5 @@ class ExperienceController extends Controller
         $Experience->save();
 
         return response()->json(['etat' => true]);
-
     }
 }

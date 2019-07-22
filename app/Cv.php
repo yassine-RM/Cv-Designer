@@ -10,6 +10,11 @@ class Cv extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function liens()
+    {
+
+        return $this->hasMany('App\Lien');
+    }
     public function comments()
     {
 

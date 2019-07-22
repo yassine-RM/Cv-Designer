@@ -25,8 +25,8 @@ class FormationRequest extends FormRequest
     {
         return [
           'titre'=> "required",
-            'description'=> "required",
-            'etablissement'=> "required",
+            'description'=> "",
+            'etablissement'=> "",
             'dateDebut'=> "required",
             'dateFin'=> "required"
         ];

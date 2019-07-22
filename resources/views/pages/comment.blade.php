@@ -1,8 +1,18 @@
 <div class="row">
+    <div class="col-10 offset-1 text-center">
+
+        <h5 class="bg-success mt-2"> <i class="fa fa-comment-o text-danger"></i> liste des
+            commentaires
+        </h5>
+
+    </div>
+</div>
+<div class="row">
     <div class="col-10 offset-1 text-right">
-        <button class="btn btn-d mt-3 btn-sm " data-target='#commentaire' data-toggle="modal"><i
-                class="fa fa-comment-o text-danger"></i> Ajouter un
+        <button class="btn btn-d mt-3 btn-sm " data-target='#commentaire' data-toggle="modal">
+            <i class="fa fa-plus text-dark"></i> Ajouter un
             commentaire
+
         </button>
     </div>
 </div>
@@ -24,7 +34,7 @@
             <div class="modal-body ">
                 <div class="row">
                     <div class="col">
-                        <form>
+                        <form method="POST">
                             <label for="comment"> Commentaire</label>
                             <textarea class="form-control" name="commentaire" v-model='coments.commentaire' cols="30"
                                 rows="3"></textarea>
@@ -50,6 +60,7 @@
                 <tr class="text-danger">
                     <th>Utiisateur</th>
                     <th>Commentaire</th>
+                    <th>Date</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -67,6 +78,7 @@
                     </td>
 
                     <td>@{{ comment.commentaire }}</td>
+                    <td>@{{ comment.created_at }}</td>
 
                     <td class="text-right">
                         <div v-if='comment.cvsUserId==comment.user_id && comment.user_id=={{ Auth::user()->id }}'>

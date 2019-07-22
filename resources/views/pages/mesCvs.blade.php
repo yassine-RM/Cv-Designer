@@ -20,10 +20,14 @@
 @else
 <div class="row m-auto">
     @foreach ($cvs as $cv)
-    <div class="col-4 mt-2">
+    <div class="col-md-4 col-sm-12  mt-2">
         <div class="card img-fluid" style="width: 25rem;">
+            @if ($cv->photo)
             <img class="card-img-top h-50" src="{{ asset($cv->photo) }}" alt="Card image cap">
-            <div  class="h-25 card-body text-light">
+            @else
+            <img class="card-img-top h-50" src="{{ asset('images/capture.jpg') }}" alt="Card image cap">
+            @endif
+            <div class="h-25 card-body text-light">
                 <div class="row">
                     <div class="col-12">
                         <div class="row">
@@ -32,7 +36,8 @@
                                 <h5 class="card-title ">
                                     <h3 class="card-text text-center text-warning "
                                         style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
-                                        {{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h3>
+                                        {{ Auth::user()->civilite }} {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+                                    </h3>
                                     <h4 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
                                         {{ $cv->titre }}</h4>
                                 </h5>
@@ -43,30 +48,40 @@
                                 <p class="card-text">{{  str_limit($cv->presentation,45)}}</p>
                                 <p class="card-text ">
 
-                                   <i class="text-success">Date de creation :</i> {{  $cv->created_at}}
+                                    <i class="text-warning">Date de creation :</i> {{  $cv->created_at}}
 
                                 </p>
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col text-success">
+                            <div class="col text-warning">
 
-                                Download <i class="fa fa-download"></i> <span
+                                Télechargements <i class="fa fa-download"></i> <span
                                     class="badge badge-light">{{ $cv->download }}</span>
 
 
                             </div>
                             <div class="col ">
                                 <a href="{{ url('/showCv/'.$cv->id.'#comment') }}" class="text-warning">
-                                    Comments <i class="fa fa-comment"></i> <span
+                                    Commentaires <i class="fa fa-comment"></i> <span
                                         class="badge badge-light">{{ $cv->comments->count() }}</span>
 
                                 </a>
                             </div>
 
+
                         </div>
                         <div class="row mt-3">
+                            <div class="col">
 
+                                <p class="card-text text-center ">
+
+                                    <a @click.prevent='lienList({{ $cv->id }})' class="btn btn-success btn-sm "
+                                        id="cursor" data-toggle="modal" data-target="#lienList">
+                                        <i class="fa fa-link"></i></a>
+
+                                </p>
+                            </div>
                             <div class="col text-center ">
                                 <a @click="visite({{ $cv->id}})" href="{{ url('/showCv/'.$cv->id ) }}">
                                     <button class="btn-sm btn btn-primary">
@@ -96,6 +111,10 @@
                             </div>
 
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -105,6 +124,8 @@
     @endforeach
 </div>
 @endif
+@include('pages.lienList')
+
 <div class="row  mt-1">
 
 

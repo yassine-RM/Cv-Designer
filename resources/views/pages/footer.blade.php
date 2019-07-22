@@ -1,6 +1,6 @@
 <!-- Grid column -->
 <div class="footer">
-    <div class="row p-4">
+    <div class="row mt-5">
         <div class="col col-md-6 offset-3  ">
 
             <div class="text-center">
@@ -17,17 +17,26 @@
                     <!--Instagram-->
 
                     <i class="fa fa-instagram fa-sm white-text mr-md-1 mr-1 fa-2x"> </i>
+
+                    <i class="fa fa-linkedin fa-sm white-text mr-md-1 mr-1 fa-2x"> </i>
+
+                    <br>
+                    <span class="footer-copyright text-light">© 2019 Copyright
+                    </span>
                 </span>
             </div>
         </div>
     </div>
     <!-- Grid row-->
     <div class="row ">
-        <div class="col col-md-6 offset-3 text-center">
-            <span class="footer-copyright text-light">© 2019 Copyright
 
+        <div class="col col-md-12">
+
+            <a href="mailto:remmanidev@gmail.com" class="nav-link text-light float-right"><i class="fa fa-envelope"></i>
+                Contactez-nous
+            </a>
             </span>
             <!-- Grid column -->
         </div>
     </div>
-    </>
+</div>

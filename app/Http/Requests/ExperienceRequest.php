@@ -27,7 +27,7 @@ class ExperienceRequest extends FormRequest
            
             
              'titre' =>"required",
-            'description' =>"required",
+            'description' =>"",
             'entreprise' =>"required",
             'logo' =>"required",
             'dateDebut' =>"required",

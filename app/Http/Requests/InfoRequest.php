@@ -33,7 +33,7 @@ class InfoRequest extends FormRequest
             'ville' => 'required',
             'paye' => 'required',
             'dateNaissance' => 'required',
-            'telephonne' => 'required|min:10|max:10',
+            'telephonne' => 'required|min:9|max:10',
 
         ];
     }

@@ -31,7 +31,8 @@ Route::get('/createCv', 'CvController@createCv');
 Route::get('/cvTemplate/{id}', 'CvController@cvTemplate');
 Route::get('/showCv/{id}', 'CvController@showCv');
 Route::get('/', 'CvController@accueil');
-Route::post('/storeCv', 'CvController@storeCv');
+Route::get('/storeCv', 'CvController@storeCv');
+Route::post('/storeCv1', 'CvController@storeCv1');
 
 //---------------------------Competences-------------------------------------------
 Route::post('/addCompetence/{id}', 'CompetenceController@addCompetence');
@@ -56,6 +57,11 @@ Route::post('/addLangue/{id}', 'LangueController@addLangue');
 Route::get('/getLangues/{id}', 'LangueController@getLangues');
 Route::delete('/deleteLangue/{id}', 'LangueController@deleteLangue');
 Route::put('/updateLangue/{id}', 'LangueController@updateLangue');
+//---------------------------Liens-------------------------------------------
+Route::post('/addLien/{id}', 'LienController@addLien');
+Route::get('/getLiens/{id}', 'LienController@getLiens');
+Route::delete('/deleteLien/{id}', 'LienController@deleteLien');
+Route::put('/updateLien/{id}', 'LienController@updateLien');
 
 //---------------------------Loisires-------------------------------------------
 Route::post('/addLoisire/{id}', 'LoisireController@addLoisire');
@@ -99,12 +105,31 @@ Route::get('listeNotification', 'CvController@listeNotification');
 Route::put('editState/{id}', 'CvController@editState');
 
 //-------------------------------------------------
-Route::get('email', 'CvController@sentMail' );
+Route::get('email', 'CvController@sentMail');
 
 //-------------------------------------------------
-Route::delete('deleteComment/{id}', 'CvController@deleteComment' );
+Route::delete('deleteComment/{id}', 'CvController@deleteComment');
 
 //-------------------------------------------------
-Route::put('editComment/{id}', 'CvController@editComment' );
+Route::put('editComment/{id}', 'CvController@editComment');
 //-------------------------------------------------
-Route::put('editDownload/{id}', 'CvController@editDownload' );
+Route::put('editDownload/{id}', 'CvController@editDownload');
+
+
+//-----------------------------countUsers----------------------
+Route::get('CountUsers', 'CvController@CountUsers');
+//-----------------------------countCvs----------------------
+Route::get('CountCvs', 'CvController@CountCvs');
+
+//-----------------------------Dashboard----------------------
+Route::get('Dashboard', 'CvController@Dashboard')->middleware('adminMiddl');
+//-----------------------------Notifications----------------------
+Route::get('Notifications', 'CvController@Notifications');
+//-----------------------------Notifications----------------------
+Route::get('showCvs/{id}', 'CvController@showCvs');
+//-----------------------------Notifications----------------------
+Route::put('EditState/{id}', 'CvController@EditState');
+//-----------------------------Notifications----------------------
+Route::put('/admin/{id}', 'CvController@admin');
+//-----------------------------deleteUser----------------------
+Route::delete('deleteUser/{id}', 'CvController@deleteUser');

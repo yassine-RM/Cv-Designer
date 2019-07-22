@@ -45,47 +45,27 @@
                                 srcset=""></a>
                     </div>
                 </div>
+
                 <div class="row mt-5" id='theme'>
                     <div class="col-6 offset-3 text-center">
+                        <table>
+                            <tr>
+                                <td>Background Color</td>
+                                <td><input type="color" name="back" v-model="bg" @change='backColor()'></td>
+                                <td>@{{ bg }}</td>
+                            </tr>
+                            <tr>
+                                <td>Text Coleur</td>
+                                <td><input type="color" name="text" v-model="text" @change='textColor()'></td>
+                                <td>@{{ text }}</td>
+                            </tr>
+                        </table>
 
-                        <a href="" @click.prevent="bgColor='background-color:black;color:white'"
-                            style="background-color: black ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:violet;color:black'"
-                            style="background-color: violet ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:deepskyblue;color:black'"
-                            style="background-color: deepskyblue ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:green;color:black'"
-                            style="background-color: green ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:blueviolet;color:black'"
-                            style="background-color: blueviolet ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:chocolate;color:black'"
-                            style="background-color: coral ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:darkturquoise;color:black'"
-                            style="background-color: darkturquoise ;width: 5px;height: 5px"> <i
-                                class="fa fa-paint-brush" aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:antiquewhite;color:black'"
-                            style="background-color: antiquewhite ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:darkgray;color:black'"
-                            style="background-color: darkgray ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:cyan;color:black'"
-                            style="background-color: cyan ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
-                        <a href="" @click.prevent="bgColor='background-color:thistle;color:black'"
-                            style="background-color: thistle ;width: 5px;height: 5px"> <i class="fa fa-paint-brush"
-                                aria-hidden="true"></i></a>
+                        <br>
+
 
                     </div>
                 </div>
-
-
             </div>
 
         </div>

@@ -28,8 +28,12 @@ class AuthController extends Controller
         $email = $request->Email;
         $password = $request->Password;
 
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+        if (Auth::attempt(['email' => $email, 'password' => $password]) ) {
+            if( Auth::user()->state==0)
             return redirect('/');
+            else
+             return redirect('/Dashboard');
+
         } else {
 
             session()->flash('errorLogin', 'login ou mot passe incorrect !!!');
@@ -100,7 +104,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/login');
+        return redirect('/');
     }
     //------------------Profile------------------
      public function getProfile()
@@ -137,10 +141,12 @@ class AuthController extends Controller
         $user->paye = $request->paye;
         $user->telephonne = $request->telephonne;
         $user->adresse = $request->adresse;
-     
-          
-            $user->photo = $request->file('photo')->store('images', 'public');
-      
+
+          if ($request->hasFile('photo')) {
+              $user->photo = $request->file('photo')->store('images', 'public');
+            
+          }
+
 
         $user->dateNaissance = $request->dateNaissance;
 

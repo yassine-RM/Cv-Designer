@@ -1,34 +1,41 @@
-
 var app = new Vue({
 	el: '#app',
 
 	data: {
+        bg:"#6ccad0",
+        text:"#dd0955",
+		option: '',
+		searchUser: '',
 		open: false,
 		show: 't1',
 		showAllComments: false,
-		bgColor: 'background-color:black;color:white',
+		//-------------------------------
+
+		//-------------------------------------------
+		bgColor: '',
+		bgColorText: '',
+		//-------------------------------------------
 		button: true,
 		theme: false,
-		
-        niveau : '',
-        //------------------profile---------------------
-      
-        profile: {
-            id: '',
-            civilite: '',
-            nom:'',
-            prenom:'',
-            photo: '',
-            telephonne: '',
-            adresse: '',
-            paye: '',
-            ville: '',
-            dateNaissance: '',
-            email: '',
-            password:''
 
-          
-        },
+		niveau: '',
+
+		//---------------------------profile---------------------
+
+		profile: {
+			id: '',
+			civilite: '',
+			nom: '',
+			prenom: '',
+			photo: '',
+			telephonne: '',
+			adresse: '',
+			paye: '',
+			ville: '',
+			dateNaissance: '',
+			email: '',
+			password: ''
+		},
 		//---------------comment-------------------
 		idcmt: '',
 		addCmt: true,
@@ -46,7 +53,9 @@ var app = new Vue({
 
 		cvs: [],
 		//-------------------------------------
+		errorsLien: [],
 		errorsCv: [],
+		errorsCv1: [],
 		errorsInfo: [],
 		errorsComp: [],
 		errorsForm: [],
@@ -118,8 +127,7 @@ var app = new Vue({
 			dateFin: ''
 		},
 		Competences: [],
-        Comps: {
-           
+		Comps: {
 			competence: '',
 			pourcentage: ''
 		},
@@ -132,6 +140,12 @@ var app = new Vue({
 		Langs: {
 			langue: '',
 			pourcentage: ''
+		},
+		idLien: '',
+		Liens: [],
+		Lien: {
+			service: '',
+			url: ''
 		},
 		Infos: {
 			civilite: '',
@@ -146,41 +160,86 @@ var app = new Vue({
 		},
 		Cv: {
 			titre: '',
-            presentation: '',
-            niveau : '',
+			presentation: '',
+			niveau: '',
 			photo: '',
 			image: ''
-		}
+		},
+		check: [],
+		dash: true,
+		Notif: '',
+        NotifList: [],
+      
 	},
 
 	//----------------------------------methodes-------------------------
 	methods: {
-		//------------------Profile-----------------------
-        getProfile: function () {
-            axios
-                .get('/getProfile')
-                .then((success) => {
-                    this.profile = success.data.profile;
-                    console.log('success get profile ==>', this.profile);
-                })
-                .catch((error) => {
-                    console.log('error get profile', error);
-                });
-        },
-        //-------------------updateProfile--------------------------------
+        //----------------color-------------------------
+        backColor:function(){
 
-        updateProfile: function (id) {
-            axios
-                .put('/updateProfile',this.profile)
-                .then((success) => {
-                    
-                    console.log('success update profile ==>',success.data.etat);
-                })
-                .catch((error) => {
-                    console.log('error update profile', error);
-                });
-          },
-        Villes: function() {
+            this.bgColor = 'background-color:' + this.bg;
+            console.log('okkkkk')
+        },
+        textColor:function(){
+
+            this.bgColorText = 'color:' + this.text;
+        },
+    
+        //------------------------------------
+		isAdmin: function(id) {
+			Swal.fire({
+				title: 'Vous ete sur?',
+				text: '',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'yes'
+			}).then((result) => {
+				if (result.value) {
+					axios
+						.put('/admin/' + id)
+						.then((respense) => {
+							if (respense.data.etat) {
+                                window.location.href = '';
+							}
+							console.log('**********-----************** ok', respense.data.etat);
+						})
+						.catch((error) => {
+							console.log('error edit state', error.response);
+						});
+				}
+			});
+		},
+		//--------------------------------------
+		Notifications: function() {
+			axios
+				.get('/Notifications')
+				.then((respense) => {
+					this.Notif = respense.data.Notif.length;
+					this.NotifList = respense.data.Notif;
+
+					console.log('success get notifications', respense.data.Notif.length);
+				})
+				.catch((error) => {
+					console.log('error get notifications', error.response);
+				});
+		},
+		EditState: function(id) {
+			
+			axios
+				.put('/EditState/' + id)
+				.then((respense) => {
+                    console.log('success edit notifications', respense.data.etat);
+                    window.location.href = '/showCv/' + id
+				})
+				.catch((error) => {
+					console.log('error edit notifications', error.response);
+				});
+		},
+
+		//----------------------------------------------
+		Villes: function() {
 			axios
 				.get('/getVilles/' + this.paye)
 				.then((respense) => {
@@ -191,18 +250,15 @@ var app = new Vue({
 				.catch((error) => {
 					console.log('error get villes');
 				});
-		},  
-        
-		//---------------------------------------------------
-
-		themeControl: function() {
-			this.theme = !this.theme;
 		},
+
 		//--------------------------------------------------
-		dateExp: function(dateD) {
+		dateExp: function() {
 			var MindateF = this.Exps.dateDebut;
+			console.log('=========min' + MindateF);
 			return MindateF;
 		},
+
 		//---------------------------------------------------
 
 		dateForm: function(dateD) {
@@ -211,12 +267,13 @@ var app = new Vue({
 		},
 		//-----------------------------------------------------
 
-		printDiv: function() {
-			var printContents = document.getElementById('divContent').innerHTML;
+		printDiv: function(div) {
+			var printContents = document.getElementById(div).innerHTML;
 			var originalContents = document.body.innerHTML;
 			document.body.innerHTML = printContents;
 			window.print();
-			document.body.innerHTML = originalContents;
+            document.body.innerHTML = originalContents;
+            window.location.href='';
 		},
 		//-------------------------------------------------
 		//------------------------------
@@ -224,11 +281,9 @@ var app = new Vue({
 			axios
 				.get('/search/' + this.search)
 				.then((success) => {
-
-                    this.data = success.data.cvs;
-                    this.allTitre()
+					this.data = success.data.cvs;
+					this.allTitre();
 					console.log('success search data ==>', this.data);
-
 				})
 				.catch((error) => {
 					console.log('error result serching', error);
@@ -273,29 +328,28 @@ var app = new Vue({
 			};
 			reader.readAsDataURL(file);
 		},
-        photoProfile(event) {
+		previewFiles1(event) {
 			let file = event.target.files[0];
 
 			let reader = new FileReader();
 			console.log('ok');
 			reader.onloadend = () => {
 				console.log('resulte ===> ', reader.result);
-				
-				this.profile.photo = reader.result;
+				this.Cv1.photo1 = reader.result;
 			};
 			reader.readAsDataURL(file);
 		},
+		photoProfile(event) {
+			let file = event.target.files[0];
 
-		//------------------------------------------------add user----------
-		registerUser: function() {
-			axios
-				.post('/register', this.user)
-				.then((res) => {
-					console.log('success add user', res.data.etat);
-				})
-				.catch((err) => {
-					console.log('error add user');
-				});
+			let reader = new FileReader();
+			console.log('ok');
+			reader.onloadend = () => {
+				console.log('resulte ===> ', reader.result);
+
+				this.profile.photo = reader.result;
+			};
+			reader.readAsDataURL(file);
 		},
 
 		//-----------------------get villes -----------------------
@@ -337,24 +391,12 @@ var app = new Vue({
 		},
 		openForm: function() {
 			this.open = !this.open;
+			this.dash = false;
 			this.addCmt = true;
 		},
-		openInfos: function() {
-			this.openInfo = !this.openInfo;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openLangue = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-		},
+
 		formation: function() {
 			this.button = true;
-			this.openFormation = !this.openFormation;
-			this.openCompetence = false;
-			this.openLangue = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.openInfo = false;
 			this.Forms = {
 				titre: '',
 				description: '',
@@ -365,21 +407,9 @@ var app = new Vue({
 		},
 		experience: function() {
 			this.button = true;
-			this.openExperience = !this.openExperience;
-			this.openFormation = false;
-			this.openLangue = false;
-			this.openCompetence = false;
-			this.openLoisire = false;
-			this.openInfo = false;
 		},
 		competence: function() {
 			this.button = true;
-			this.openCompetence = !this.openCompetence;
-			this.openFormation = false;
-			this.openLangue = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.openInfo = false;
 			this.Comps = {
 				competence: '',
 				pourcentage: ''
@@ -387,25 +417,20 @@ var app = new Vue({
 		},
 		langue: function() {
 			this.button = true;
-			this.openLangue = !this.openLangue;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.openInfo = false;
 			this.Langs = {
 				langue: '',
 				pourcentage: ''
 			};
 		},
+		link: function() {
+			this.button = true;
+			this.Lien = {
+				service: '',
+				url: ''
+			};
+		},
 		loisire: function() {
 			this.button = true;
-			this.openLoisire = !this.openLoisire;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openExperience = false;
-			this.openLangue = false;
-			this.openInfo = false;
 			this.Lois = {
 				loisire: ''
 			};
@@ -414,8 +439,8 @@ var app = new Vue({
 		addComment: function() {
 			axios
 				.post('/addComment/' + idcv, this.coments)
-                .then((respense) => {
-                    Swal.fire('Successfly', 'Votre comentaire a été ajouter avec succée', 'success');
+				.then((respense) => {
+					Swal.fire('Successfly', 'Votre comentaire a été ajouter avec succée', 'success');
 					console.log('success add comment', respense.data.comment);
 					this.coments = {
 						commentaire: ''
@@ -442,38 +467,38 @@ var app = new Vue({
 				});
 		},
 		deleteComment: function(id) {
-            Swal.fire({
-                title: 'Vous ete sur?',
-                text: 'de supprimer ce commentaire!',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Oui, Supprimer!!!'
-            }).then((result) => {
-                if (result.value) {
-                    console.log('succes delete comment',id);
-				axios
-					.delete('/deleteComment/' + id)
-					.then((respense) => {
-						console.log('succes delete comment', respense.data.etat);
-						if (respense.data.etat) {
-							var index = this.Comments.indexOf(id);
-							this.Comments.splice(index, 1);
-							this.getComments();
-						}
-					})
-					.catch((error) => {
-						console.log('error delete comment', error.response);
-					});
-			}
-			})
+			Swal.fire({
+				title: 'Vous ete sur?',
+				text: 'de supprimer ce commentaire!',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Oui, Supprimer!!!'
+			}).then((result) => {
+				if (result.value) {
+					console.log('succes delete comment', id);
+					axios
+						.delete('/deleteComment/' + id)
+						.then((respense) => {
+							console.log('succes delete comment', respense.data.etat);
+							if (respense.data.etat) {
+								var index = this.Comments.indexOf(id);
+								this.Comments.splice(index, 1);
+								this.getComments();
+							}
+						})
+						.catch((error) => {
+							console.log('error delete comment', error.response);
+						});
+				}
+			});
 		},
 		editComment: function() {
 			axios
 				.put('/editComment/' + this.idcmt, this.coments)
 				.then((respense) => {
-                    Swal.fire('Successfly', 'Votre competence a été modifier avec succée', 'success');
+					Swal.fire('Successfly', 'Votre competence a été modifier avec succée', 'success');
 
 					console.log('succes edit comment', respense.data.etat);
 					this.coments = {
@@ -483,6 +508,7 @@ var app = new Vue({
 				})
 				.catch((error) => {
 					console.log('error edit comment', error);
+					if (error.response.status == 422) this.errorsComment = error.response.data.errors;
 				});
 		},
 
@@ -491,10 +517,9 @@ var app = new Vue({
 			axios
 				.post('/addCompetence/' + idcv, this.Comps)
 				.then((respense) => {
-                    console.log('success add competences');
-                    Swal.fire('Successfly', 'Votre competence a été ajouter avec succée', 'success');
+					console.log('success add competences');
+					Swal.fire('Successfly', 'Votre competence a été ajouter avec succée', 'success');
 					this.Comps = {
-						
 						competence: '',
 						pourcentage: ''
 					};
@@ -532,7 +557,7 @@ var app = new Vue({
 						.then((respense) => {
 							console.log('succes delete competence');
 							if (respense.data.etat) {
-                                var index = this.Competences.indexOf(competence);
+								var index = this.Competences.indexOf(competence);
 								this.Competences.splice(index, 1);
 							}
 						})
@@ -543,32 +568,24 @@ var app = new Vue({
 			});
 		},
 		editCompetence: function(competence) {
-			this.openLangue = false;
-			this.openFormation = false;
-			this.openCompetence = true;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.button = false;
-			this.openInfo = false;
 			this.Comps = competence;
 		},
 		updateCompetence: function(competence) {
 			axios
-                .put('/updateCompetence/' + competence.idComp, competence)
+				.put('/updateCompetence/' + competence.idComp, competence)
 				.then((respense) => {
-					console.log('succes updtate competences',respense.data.etat);
+					console.log('succes updtate competences', respense.data.etat);
 					this.openCompetence = false;
 					Swal.fire('Successfly', 'Votre competence a été modifier avec succée', 'success');
 					this.Comps = {
-						
 						competence: '',
 						pourcentage: ''
 					};
 					this.errorsComp = '';
 				})
 				.catch((error) => {
-                    if (error.response.status == 422) this.errorsComp = error.response.data.errors;
-                    console.log('error updtate competences', error.response);
+					if (error.response.status == 422) this.errorsComp = error.response.data.errors;
+					console.log('error updtate competences', error.response);
 				});
 		},
 		//--------------------------------Formations-------------------------------------
@@ -576,8 +593,8 @@ var app = new Vue({
 			axios
 				.post('/addFormation/' + idcv, this.Forms)
 				.then((respense) => {
-                    console.log('success add Formations');
-                    Swal.fire('Successfly', 'Votre formation a été ajouter avec succée', 'success');
+					console.log('success add Formations');
+					Swal.fire('Successfly', 'Votre formation a été ajouter avec succée', 'success');
 					this.Forms = {
 						titre: '',
 						description: '',
@@ -630,13 +647,6 @@ var app = new Vue({
 			});
 		},
 		editFormation: function(Formation) {
-			this.openLangue = false;
-			this.openFormation = true;
-			this.openCompetence = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.button = false;
-			this.openInfo = false;
 			this.Forms = Formation;
 		},
 		updateFormation: function() {
@@ -662,10 +672,9 @@ var app = new Vue({
 		//--------------------------------Experiences-------------------------------------
 		addExperience: function() {
 			axios
-                .post('/addExperience/' + idcv, this.Exps)
-                
-                .then((respense) => {
-                    Swal.fire('Successfly', 'Votre experience a été ajouter avec succée', 'success');
+				.post('/addExperience/' + idcv, this.Exps)
+				.then((respense) => {
+					Swal.fire('Successfly', 'Votre experience a été ajouter avec succée', 'success');
 
 					this.Exps = {
 						titre: '',
@@ -722,13 +731,6 @@ var app = new Vue({
 			});
 		},
 		editExperience: function(Experience) {
-			this.openLangue = false;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openExperience = true;
-			this.openLoisire = false;
-			this.button = false;
-			this.openInfo = false;
 			this.Exps = Experience;
 		},
 		updateExperience: function(experience) {
@@ -750,6 +752,7 @@ var app = new Vue({
 				})
 				.catch((error) => {
 					if (error.response.status == 422) this.errorsExp = error.response.data.errors;
+					console.log('exp error ===', this.errorsExp);
 				});
 		},
 		//--------------------------------Loisires-------------------------------------
@@ -757,8 +760,8 @@ var app = new Vue({
 			axios
 				.post('/addLoisire/' + idcv, this.Lois)
 				.then((respense) => {
-                    console.log('success add Loisires');
-                    Swal.fire('Successfly', 'Votre loisire a été ajouter avec succée', 'success');
+					console.log('success add Loisires');
+					Swal.fire('Successfly', 'Votre loisire a été ajouter avec succée', 'success');
 					this.Lois = {
 						titre: ''
 					};
@@ -808,20 +811,13 @@ var app = new Vue({
 			});
 		},
 		editLoisire: function(Loisire) {
-			this.openLangue = false;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openExperience = false;
-			this.openInfo = false;
-			this.openLoisire = true;
-			this.button = false;
 			this.Lois = Loisire;
 		},
 		updateLoisire: function(Loisire) {
 			axios
 				.put('/updateLoisire/' + Loisire.id, Loisire)
 				.then((respense) => {
-					console.log('succes updtate Loisires',respense.data.etat);
+					console.log('succes updtate Loisires', respense.data.etat);
 					this.openLoisire = false;
 					Swal.fire('Successfly', 'Votre loisire a été modifier avec succée', 'success');
 					this.Lois = {
@@ -838,8 +834,8 @@ var app = new Vue({
 			axios
 				.post('/addLangue/' + idcv, this.Langs)
 				.then((respense) => {
-                    console.log('success add Langues');
-                    Swal.fire('Successfly', 'Votre langue a été ajouter avec succée', 'success');
+					console.log('success add Langues');
+					Swal.fire('Successfly', 'Votre langue a été ajouter avec succée', 'success');
 					this.getLangues();
 					this.Langs = {
 						langue: '',
@@ -876,11 +872,11 @@ var app = new Vue({
 				if (result.value) {
 					console.log('icd Langue ===>', this.idLang);
 					axios
-                        .delete('/deleteLangue/' + this.idLang)
+						.delete('/deleteLangue/' + this.idLang)
 						.then((respense) => {
 							console.log('succes delete Langue');
 							if (respense.data.etat) {
-                                var index = this.Langues.indexOf(langue);
+								var index = this.Langues.indexOf(langue);
 								this.Langues.splice(index, 1);
 							}
 						})
@@ -891,13 +887,6 @@ var app = new Vue({
 			});
 		},
 		editLangue: function(Langue) {
-			this.openLangue = true;
-			this.openFormation = false;
-			this.openCompetence = false;
-			this.openExperience = false;
-			this.openLoisire = false;
-			this.openInfo = false;
-			this.button = false;
 			this.Langs = Langue;
 		},
 		updateLangue: function(Langue) {
@@ -918,15 +907,120 @@ var app = new Vue({
 					if (error.response.status == 422) this.errorsLang = error.response.data.errors;
 				});
 		},
+		//--------------------------------Lien-------------------------------------
+		addLien: function() {
+			axios
+				.post('/addLien/' + idcv, this.Lien)
+				.then((respense) => {
+					console.log('success add Lien');
+					Swal.fire('Successfly', 'Votre Lien a été ajouter avec succée', 'success');
+					this.getLiens();
+					this.Lien = {
+						service: '',
+						url: ''
+					};
+					this.errorsLien = '';
+				})
+				.catch((error) => {
+					if (error.response.status == 422) {
+						console.log('error add Lien', error);
+						this.errorsLien = error.response.data.errors;
+					}
+				});
+		},
+		getLiens: function() {
+			axios
+				.get('/getLiens/' + idcv)
+				.then((respense) => {
+					console.log('succes get Liens');
+					this.Liens = respense.data.Liens;
+					console.log(this.Liens);
+				})
+				.catch((error) => {
+					console.log('error get Liens');
+				});
+		},
+		lienList: function(id) {
+			axios
+				.get('/getLiens/' + id)
+				.then((respense) => {
+					console.log('succes get Liens');
+					this.Liens = respense.data.Liens;
+					console.log(this.Liens);
+				})
+				.catch((error) => {
+					console.log('error get Liens');
+				});
+		},
+		mesLinks: function() {
+			axios
+				.get('/getLiens/' + idcv)
+				.then((respense) => {
+					console.log('succes get Liens');
+					this.Liens = respense.data.Liens;
+					console.log(this.Liens);
+				})
+				.catch((error) => {
+					console.log('error get Liens');
+				});
+		},
+		deleteLien: function(Lien) {
+			Swal.fire({
+				title: 'Vous ete sur?',
+				text: 'de supprimer ce Lien!',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Oui, Supprimer!!!'
+			}).then((result) => {
+				if (result.value) {
+					console.log('icd Lien ===>', this.idLien);
+					axios
+						.delete('/deleteLien/' + this.idLien)
+						.then((respense) => {
+							console.log('succes delete Lien');
+							if (respense.data.etat) {
+								var index = this.Liens.indexOf(Lien);
+								this.Liens.splice(index, 1);
+							}
+						})
+						.catch((error) => {
+							console.log('error delete Liens');
+						});
+				}
+			});
+		},
+		editLien: function(Lien) {
+			this.Lien = Lien;
+		},
+		updateLien: function(Lien) {
+			console.log('----->idLien', Lien.id);
+			axios
+				.put('/updateLien/' + Lien.id, Lien)
+				.then((respense) => {
+					this.openLien = false;
+					Swal.fire('Successfly', 'Votre Lien a été modifier avec succée', 'success');
+					console.log('succes updtate Liens');
+					this.Liens = {
+						Lien: '',
+						pourcentage: ''
+					};
+					this.errorsLien = '';
+				})
+				.catch((error) => {
+					if (error.response.status == 422) this.errorsLien = error.response.data.errors;
+				});
+		},
 		//--------------------Information personnelle-----------
 		getInfo: function() {
-            console.log('=====info cv id ',idcv);
+			console.log('=====info cv id ', idcv);
 			axios
 				.get('/getInfos/' + idcv)
 				.then((respense) => {
 					this.Infos = respense.data.infos;
-					this.Cv = respense.data.cv;
-					console.log('=====', this.Cv.photo);
+                    this.Cv = respense.data.cv;
+               
 					console.log('success get infos', this.Cv.photo);
 				})
 				.catch((error) => {
@@ -937,7 +1031,7 @@ var app = new Vue({
 			axios
 				.put('/updateInfos', this.Infos)
 				.then((respense) => {
-                    Swal.fire('Successfly', 'Votre information a été modifier avec succée', 'success');
+					Swal.fire('Successfly', 'Votre information a été modifier avec succée', 'success');
 
 					console.log('succes updtate infos ====', respense.data.etat);
 				})
@@ -963,42 +1057,53 @@ var app = new Vue({
 		deleteCv: function(idc) {
 			Swal.fire({
 				title: 'Vous ete sur?',
-				text: 'de supprimer le cv!',
+				text: 'de supprimer le cv !',
 				type: 'warning',
 				showCancelButton: true,
 				confirmButtonColor: '#3085d6',
 				cancelButtonColor: '#d33',
 				confirmButtonText: 'Oui, Supprimer!!!'
 			}).then((result) => {
-				axios
-					.delete('/deleteCv/' + idc)
-					.then((respense) => {
-						if (respense.data.etat) {
-							window.location.href = '';
-						}
-					})
-					.catch((error) => {
-						console.log('-----------', error);
-					});
+				if (result.value) {
+					axios
+						.delete('/deleteCv/' + idc)
+						.then((respense) => {
+							if (respense.data.etat) {
+								window.location.href = '';
+							}
+						})
+						.catch((error) => {
+							console.log('-----------', error);
+						});
+				}
+			});
+		},
+		//--------------------------------------
+		deleteUser: function(iduser) {
+			Swal.fire({
+				title: 'Vous ete sur?',
+				text: 'de supprimer ce utilisateur !',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Oui, Supprimer!!!'
+			}).then((result) => {
+				if (result.value) {
+					axios
+						.delete('/deleteUser/' + iduser)
+						.then((respense) => {
+							if (respense.data.etat) {
+								window.location.href = '';
+							}
+						})
+						.catch((error) => {
+							console.log('-----------', error);
+						});
+				}
 			});
 		},
 
-		addCv: function() {
-			console.log('======>', this.Cv);
-			axios
-				.post('/storeCv', this.Cv)
-				.then((respense) => {
-                    if (respense.data.etat) {
-                        Swal.fire('Successfly', 'Votre cv a été ajouter avec succée', 'success');
-						window.location.href = '/mesCvs';
-					}
-					console.log('succes add cv', respense.data.etat);
-				})
-				.catch((error) => {
-					if (error.response.status == 422) this.errorsCv = error.response.data.errors;
-					console.log('-----------', this.errorsCv);
-				});
-		},
 		editDownload: function() {
 			axios
 				.put('/editDownload/' + idcv)
@@ -1011,15 +1116,19 @@ var app = new Vue({
 		}
 	},
 	mounted: function() {
-        this.getProfile();
-        this.allTitre();
+		this.Notifications();
+
+		this.allTitre();
 		this.getPayes();
-        this.getInfo();
+		this.getInfo();
 		this.getCompetences();
 		this.getFormations();
 		this.getExperiences();
 		this.getLoisires();
-        this.getLangues();
-        this.getComments()
+		this.getLangues();
+		this.getLiens();
+        this.getComments();
+        this.backColor()
+        this.textColor()
 	}
 });

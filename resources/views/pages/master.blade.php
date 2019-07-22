@@ -10,6 +10,7 @@
     <link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{asset('js/jquery.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/chart.js')}}"></script>
 
 
     <title>CvDésigner</title>
@@ -25,7 +26,8 @@
                 @include('pages.navBar')
             </div>
         </div>
-        <div class="row">
+
+        <div class="row " id='bodyy'>
             <div class="col-12 ">
 
                 <!----------------------section----------------------->
@@ -39,6 +41,7 @@
                 @include('pages.profile')
             </div>
         </div>
+
         <!----------------------footer----------------------->
         <div class="row " id="footer">
             <div class="col-12">
@@ -47,11 +50,13 @@
         </div>
     </div>
     @yield('script')
+
     <!----------------------scripts static ----------------------->
     <script src="{{asset('js/sweetall.min.js')}}"></script>
     <script src="{{asset('js/axios.min.js')}}"></script>
     <script src="{{asset('js/vue.js')}}"></script>
     <script src="{{asset('js/cv.js')}}"></script>
+    <script src="{{asset('js/graph.js')}}"></script>
 </body>
 
 </html>

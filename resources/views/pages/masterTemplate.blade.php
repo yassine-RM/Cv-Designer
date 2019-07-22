@@ -1,7 +1,7 @@
 @extends('pages.master')
 
 @section('body')
-<div class="row text-light bg-light">
+<div class="row text-light ">
     <div class="col-12">
         <div class="row">
             <div class="col-4 offset-4 text-center">
@@ -20,23 +20,28 @@
             </div>
         </div>
 
-        <div class="row mt-1 mr-1">
+        <div class="row mt-1">
             <div class="col-12 text-right">
-
+                <a @click.prevent='mesLinks' class="btn btn-success btn-sm " id="cursor" data-toggle="modal"
+                    data-target="#lienList">
+                    <i class="fa fa-link"></i>
+                    Mes liens
+                </a>
+                &nbsp;
                 <a href="{{ url('cvTemplate/'.$idCv) }}" class="btn btn-danger btn-sm"><i class="fa fa-edit"></i> Editer
-                </a>&nbsp;
-
-                <a href="#" class="btn btn-info btn-sm" @click.prevent='editDownload(),printDiv()'><i
+                </a>
+                &nbsp;
+                <a href="#" class="btn btn-info btn-sm" @click.prevent="editDownload(),printDiv('divContent')"><i
                         class="fa fa-download"></i> Télécharger</a>
             </div>
         </div>
-        <div class="row  ml-1 mr-1">
+        <div class="row ">
             <div class="col-12 mt-1">
 
-                <div class="mr-1 ml-1" v-if="show=='t1'">
+                <div v-if="show=='t1'">
                     @include('pages.showCv3')
                 </div>
-                <div class="mr-1 ml-1" v-if="show=='t2'">
+                <div v-if="show=='t2'">
                     @include('pages.showCv4')
                 </div>
                 <div class="mr-1 ml-1" v-if="show=='t3'">
@@ -48,11 +53,14 @@
                 <div class="mr-1 ml-1" v-if="show=='t5'">
                     @include('pages.showCv2')
                 </div>
+                <div>
+                    @include('pages.lienList')
+                </div>
 
 
             </div>
         </div>
-        <div class="row bg-light " id="comment">
+        <div class="row mt-5" id="comment">
             <div class="col-12">
                 @include('pages.comment')
             </div>

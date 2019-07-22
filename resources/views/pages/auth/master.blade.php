@@ -17,24 +17,24 @@
 </head>
 
 <body class="body">
-    <div class="container-fluid">
+    <div class="container-fluid" >
 
         <!----------------------section----------------------->
         @yield('body')
 
 
 
-        <!----------------------scripts----------------------->
-        <script src="{{asset('js/axios.min.js')}}"></script>
-        <script src="{{asset('js/vue.js')}}"></script>
-        <script src="{{asset('js/cv.js')}}"></script>
+
         <!----------------------footer----------------------->
 
 
     </div>
     </div>
     </div>
-
+<!----------------------scripts----------------------->
+    <script src="{{asset('js/axios.min.js')}}"></script>
+    <script src="{{asset('js/vue.js')}}"></script>
+    <script src="{{asset('js/cv.js')}}"></script>
 </body>
 
 </html>

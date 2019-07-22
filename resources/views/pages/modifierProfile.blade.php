@@ -1,7 +1,20 @@
 @extends('pages.master')
 @section('body')
-<div class="row mb-5">
-    <div class="col-8 offset-2 " style="background-color: azure !important">
+<script>
+    function passe(){
+
+    var passe=document.getElementById('myPasse');
+
+    if (passe.type==="password") {
+        passe.type="text"
+    }
+    else
+    passe.type="password"
+
+}
+</script>
+<div class="row mb-5 mt-5">
+    <div class="col-8 offset-2 modal-body">
         @if (session()->get('profileSuccess'))
 
         <div class="row">
@@ -18,9 +31,9 @@
         </div>
 
         @endif
-        <div class="row mt-5 text-dark">
+        <div class="row mt-2">
             <div class="col">
-                <h3 class="text-center"><i class="fa fa-user text-danger" aria-hidden="true"></i>
+                <h3 class="text-center"><i class="fa fa-user text-warning" aria-hidden="true"></i>
                     Editer mon profile</h3>
                 <form method="post" action="{{ url('updateProfile') }}" enctype="multipart/form-data" class="mt-5">
                     @csrf
@@ -44,7 +57,7 @@
                                 <label for="Nom">Nom </label>
                                 <input type="text" value="{{ Auth::user()->nom }}" name="nom" id="Nom"
                                     class="form-control  @if($errors->get('nom')) is-invalid @endif" placeholder="Nom">
-                                <div class="invalid-feedback "> @if ($errors->get('nom'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('nom'))
                                     @foreach ($errors->get('nom') as $error) {{ $error }} @endforeach @endif</div>
                             </div>
                         </div>
@@ -54,7 +67,7 @@
                                 <input type="text" value="{{ Auth::user()->prenom }}" name="prenom" id="Prenom"
                                     class="form-control @if($errors->get('prenom')) is-invalid @endif"
                                     placeholder="Prenom">
-                                <div class="invalid-feedback "> @if ($errors->get('prenom'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('prenom'))
                                     @foreach ($errors->get('prenom') as $error) {{ $error }} @endforeach @endif
                                 </div>
 
@@ -70,7 +83,7 @@
                                 <input type="number" value="{{ Auth::user()->telephonne }}" min="0" name="telephonne"
                                     class="form-control @if($errors->get('telephonne')) is-invalid @endif"
                                     placeholder="Telephonne">
-                                <div class="invalid-feedback ">
+                                <div class="invalid-feedback text-warning ">
                                     @if($errors->get('telephonne')) @foreach ($errors->get('telephonne') as $error)
                                     {{ $error }} @endforeach @endif</div>
                             </div>
@@ -85,7 +98,7 @@
                                     class="form-control @if($errors->get('adresse')) is-invalid @endif">
                                                                {{ Auth::user()->adresse }}
                                                         </textarea>
-                                <div class="invalid-feedback "> @if ($errors->get('adresse'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('adresse'))
                                     @foreach ($errors->get('adresse') as $error) {{ $error }} @endforeach @endif
                                 </div>
                             </div>
@@ -102,7 +115,7 @@
                                 <input type="date" value="{{ Auth::user()->dateNaissance }}" name="dateNaissance"
                                     id="DateNaissance "
                                     class="form-control @if($errors->get('dateNaissance')) is-invalid @endif">
-                                <div class="invalid-feedback ">
+                                <div class="invalid-feedback text-warning ">
                                     @if ($errors->get('dateNaissance')) @foreach ($errors->get('dateNaissance') as
                                     $error) {{ $error }} @endforeach @endif</div>
                             </div>
@@ -120,7 +133,7 @@
                                     @endforeach
 
                                 </select>
-                                <div class="invalid-feedback "> @if ($errors->get('paye'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('paye'))
                                     @foreach ($errors->get('paye') as $error) {{ $error }} @endforeach @endif</div>
                             </div>
                         </div>
@@ -134,7 +147,7 @@
 
                                     <option v-for='ville in villes'>@{{ville}}</option>
                                 </select>
-                                <div class="invalid-feedback "> @if ($errors->get('ville'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('ville'))
                                     @foreach ($errors->get('ville') as $error) {{ $error }} @endforeach @endif</div>
                             </div>
                         </div>
@@ -147,7 +160,7 @@
                                 <input name="photo" type="file" accept="image/*" id="file"
                                     class="form-control @if($errors->get('photo')) is-invalid @endif"
                                     placeholder="Photo">
-                                <div class="invalid-feedback "> @if ($errors->get('photo'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('photo'))
                                     @foreach ($errors->get('photo') as $error) {{ $error }} @endforeach @endif</div>
                             </div>
                         </div>
@@ -158,18 +171,24 @@
                                 <input type="Email" value="{{ Auth::user()->email }}" name="email" id="Email"
                                     class="form-control @if($errors->get('email')) is-invalid @endif form-block"
                                     placeholder="Email">
-                                <div class="invalid-feedback "> @if ($errors->get('email'))
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('email'))
                                     @foreach ($errors->get('email') as $error) {{ $error }} @endforeach @endif</div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="Password">Mot de passe </label>
-
-                                <input type="password" name="password"
-                                    class="form-control @if($errors->get('password')) is-invalid @endif"
-                                    placeholder="Password" id="Password">
-                                <div class="invalid-feedback "> @if ($errors->get('password'))
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-eye" id="cursor" aria-hidden="true" onclick="passe()"></i>
+                                        </div>
+                                    </div>
+                                    <input type="password" name="password" id="myPasse"
+                                        class="form-control @if($errors->get('password')) is-invalid @endif"
+                                        placeholder="Password">
+                                </div>
+                                <div class="invalid-feedback text-warning "> @if ($errors->get('password'))
                                     @foreach ($errors->get('password') as $error) {{ $error }} @endforeach @endif
                                 </div>
                             </div>
@@ -193,4 +212,5 @@
         </div>
     </div>
 </div>
+
 @endsection

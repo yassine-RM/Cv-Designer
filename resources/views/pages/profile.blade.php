@@ -3,7 +3,7 @@
     <div class="modal-dialog" style="max-width: 50% !important;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fa fa-user text-danger"></i> Profile</h5>
+                <h5 class="modal-title"><i class="fa fa-user text-danger"></i> Mon profile</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -21,24 +21,28 @@
                     <div class="row mt-5">
                         <div class="col-6">
 
-                            <p class="text-danger"> Date Naissance: <span class="text-dark">
+                            <p class="text-danger"> Date Naissance : <span class="text-warning">
                                     {{ Auth::user()->dateNaissance }}</span></p>
-                            <p class="text-danger"> Adresse: <span class="text-dark"> {{ Auth::user()->adresse }}</span>
+                            <p class="text-danger"> Adresse : <span class="text-warning">
+                                    {{ Auth::user()->adresse }}</span>
                             </p>
-                            <p class="text-danger"> Gmail: <span class="text-dark"> {{ Auth::user()->email }}</span></p>
+                            <p class="text-danger"> Gmail : <span class="text-warning"> {{ Auth::user()->email }}</span>
+                            </p>
                         </div>
 
                         <div class="col-6">
-                            <p class="text-danger"> Téléphonne: <span
-                                    class="text-dark">{{ Auth::user()->telephonne }}</span> </p>
-                            <p class="text-danger"> Paye: <span class="text-dark">{{ Auth::user()->paye }}</span> </p>
-                            <p class="text-danger"> Ville: <span class="text-dark"> {{ Auth::user()->ville }}</span></p>
+                            <p class="text-danger"> Téléphonne : <span
+                                    class="text-warning">{{ Auth::user()->telephonne }}</span> </p>
+                            <p class="text-danger"> Paye : <span class="text-warning">{{ Auth::user()->paye }}</span>
+                            </p>
+                            <p class="text-danger"> Ville : <span class="text-warning"> {{ Auth::user()->ville }}</span>
+                            </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 text-right ">
                             <a href="/getProfile" class="btn btn-warning btn-sm  ">
-                                <i class="fa fa-edit    "></i> Modifier votre profile
+                                <i class="fa fa-edit    "></i> Modifier
                             </a>
                         </div>
 

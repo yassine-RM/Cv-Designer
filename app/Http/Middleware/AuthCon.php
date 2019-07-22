@@ -21,6 +21,5 @@ class AuthCon
         } else {
             return redirect('/login');
         }
-
     }
 }

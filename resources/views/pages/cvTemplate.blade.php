@@ -11,18 +11,19 @@
 </script>
 @endsection
 @section('body')
-<div class="row  mb-5" id="top">
-    <div class="col-2 side">
+<div class="row " id="top">
+    <div class="col-2  side">
         <h5>
             @include('pages.sideBar')
         </h5>
     </div>
     <div class="col-10">
         <div class="row">
-            <div class="col-12" id="CvAddEtems">
+            <div class="col-12">
                 @include('pages.cv.createInfo')
             </div>
-            <div class="col-8 offset-2 " id="CvAddEtems">
+            <div class="col-8 offset-2 ">
+                @include('pages.cv.createLien')
                 @include('pages.cv.createFormation')
                 @include('pages.cv.createExperience')
                 @include('pages.cv.createCompetence')
@@ -32,10 +33,12 @@
 
             </div>
         </div>
-        <div class="row mt-3 mr-1 cvtemplate">
-            <div class=" col-3 p-2 ">
+        <div class="row p-5  " id="cvtemplate">
+            <div class=" col-3 p-3  ">
                 <div>
-                    <img :src="Cv.photo" alt="cv photo" width="200" height="200" class="rounded-circle">
+                    <img v-if='Cv.photo' :src="Cv.photo" alt="cv photo" width="200" height="200" class="rounded-circle">
+                    <img v-else src="{{ asset('images/user.png') }}" alt="cv photo" width="200" height="200"
+                        class="rounded-circle">
                 </div>
                 <div id="print">
                     <h5 class=" card-title mt-2">
@@ -46,7 +49,7 @@
                     <p><i class="fa fa-flag"></i> @{{Infos.paye}}</p>
                     <p> <i class="fa fa-home"></i> @{{Infos.ville}} </p>
                     <p><i class="fa fa-address-card"></i> @{{Infos.adresse}}</p>
-                    <p> <i class="fa fa-university"></i> @{{  Cv.niveau}}</p>
+                    <p> <i v-if='Cv.niveau!=null' class="fa fa-level-up"></i> @{{  Cv.niveau}}</p>
 
                     <h5 class="card-title">
                         <h3 class="text-primary"><i class="fa fa-phone"></i> Contact</h3>
@@ -64,7 +67,7 @@
             </div>
             <div class=" col-9 ">
                 <div class="row ">
-                    <div class="col col-9 ">
+                    <div class="col col-9 p-3">
                         <h2>@{{Infos.civilite}} &nbsp; @{{Infos.nom}}&nbsp;&nbsp;@{{Infos.prenom}}</h2>
                         <div class="text-info">
                             <h3>@{{Cv.titre}}</h3>
@@ -81,7 +84,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col col-8 ">
+                    <div class="col col-6 ">
                         <div class="row  mt-1 ">
                             <div class="col-12">
                                 <div class="row">
@@ -99,7 +102,7 @@
                                             </div>
                                             <div class="col-2">
                                                 <p>
-                                                    <a data-toggle="modal" data-target="#formModal"
+                                                    <a data-toggle="modal" data-target="#formModal" id="cursor"
                                                         @click="idForm=formation.id,button=false,editFormation(formation)"><i
                                                             class="fa fa-edit text-success"></i></a>
                                                     <a href="#"
@@ -151,7 +154,7 @@
                                             <div class="col-4">
 
                                                 <p>
-                                                    <a data-toggle="modal" data-target="#expModal"
+                                                    <a data-toggle="modal" data-target="#expModal" id="cursor"
                                                         @click="button=false,editExperience(experience)"><i
                                                             class="fa fa-edit text-success"></i></a>
                                                     <a href="#"
@@ -194,24 +197,29 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row  mt-1">
                             <div class="col-12">
                                 <div class="row mt-2">
                                     <p class="card-text">
-                                        <h2 v-if='Loisires.length' class="text-primary"><i
-                                                class="text-danger fa fa-paper-plane-o"></i> Loisires</h2>
+                                        <h2 v-if='Liens.length' class="text-primary"><i
+                                                class="text-danger fa fa-link"></i> Liens</h2>
                                     </p>
                                 </div>
-                                <div class="row" v-for='loisire in Loisires'>
-                                    <div class="col-8">
-                                        <h4><i class="fa fa-caret-right"></i> @{{loisire.titre}}</h4>
-                                    </div>
+                                <div class="row" v-for='lien in Liens'>
                                     <div class="col-4">
+                                        <h6><i class="fa fa-caret-right"></i> @{{lien.service}}</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <i> @{{lien.url.substring(0,30)}}</i>
+                                    </div>
+
+                                    <div class="col-2">
                                         <p>
-                                            <a data-toggle="modal" data-target="#loisModal"
-                                                @click="button=false,editLoisire(loisire)"><i
+                                            <a data-toggle="modal" data-target="#linkModal" id="cursor"
+                                                @click="button=false,editLien(lien)"><i
                                                     class="fa fa-edit text-success"></i></a>
-                                            <a href="#" @click.prevent='idLoisire=loisire.id,deleteLoisire(loisire)'><i
+                                            <a href="#" @click.prevent='idLien=lien.id,deleteLien(lien)'><i
                                                     class="fa fa-trash text-danger"></i></a>
                                         </p>
                                     </div>
@@ -221,7 +229,7 @@
                         </div>
                     </div>
 
-                    <div class="col col-4 ">
+                    <div class="col col-6 ">
                         <div class="row  mt-1 ">
                             <div class="col-12">
                                 <p class="card-text ">
@@ -229,11 +237,11 @@
                                             class="text-danger fa fa-id-card"></i> Competences</h2>
                                 </p>
                                 <div class="row" v-for='competence in Competences'>
-                                    <div class="col-3">
+                                    <div class="col-5">
                                         <p class="card-text"><i class="fa fa-caret-right"></i>
                                             @{{competence.competence}}</p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-5">
                                         <div class="progress">
                                             <div class="progress-bar-striped bg-primary"
                                                 v-bind:style="{width: competence.pourcentage+'%'}" role="progressbar"
@@ -241,9 +249,9 @@
                                                 @{{competence.pourcentage}}%</div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-2">
                                         <p>
-                                            <a data-toggle="modal" data-target="#compModal"
+                                            <a data-toggle="modal" data-target="#compModal" id="cursor"
                                                 @click="button=false,editCompetence(competence)"><i
                                                     class="fa fa-edit text-success"></i></a>
                                             <a href="#"
@@ -256,6 +264,32 @@
                             </div>
 
                         </div>
+                        <div class="row  mt-1">
+                            <div class="col-12">
+                                <div class="row mt-2">
+                                    <p class="card-text">
+                                        <h2 v-if='Loisires.length' class="text-primary"><i
+                                                class="text-danger fa fa-paper-plane-o"></i> Loisires
+                                        </h2>
+                                    </p>
+                                </div>
+                                <div class="row" v-for='loisire in Loisires'>
+                                    <div class="col-8">
+                                        <h4><i class="fa fa-caret-right"></i> @{{loisire.titre}}</h4>
+                                    </div>
+                                    <div class="col-4">
+                                        <p>
+                                            <a data-toggle="modal" data-target="#loisModal" id="cursor"
+                                                @click="button=false,editLoisire(loisire)"><i
+                                                    class="fa fa-edit text-success"></i></a>
+                                            <a href="#" @click.prevent='idLoisire=loisire.id,deleteLoisire(loisire)'><i
+                                                    class="fa fa-trash text-danger"></i></a>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                         <div class="row  mt-1 ">
                             <div class="col-12">
                                 <p class="card-text">
@@ -263,10 +297,10 @@
                                             class="text-danger fa fa-language"></i> Langues</h2>
                                 </p>
                                 <div class="row" v-for='langue in Langues'>
-                                    <div class="col-3">
+                                    <div class="col-5">
                                         <p class="card-text"><i class="fa fa-caret-right"></i> @{{langue.langue}}</p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-5">
                                         <div class="progress">
                                             <div class="progress-bar-striped bg-primary"
                                                 v-bind:style="{width: langue.pourcentage+'%'}" role="progressbar"
@@ -274,9 +308,9 @@
                                                 @{{langue.pourcentage}}%</div>
                                         </div>
                                     </div>
-                                    <div class="col-3 text-right">
+                                    <div class="col-2 text-right">
 
-                                        <a data-toggle="modal" data-target="#langModal"
+                                        <a data-toggle="modal" data-target="#langModal" id="cursor"
                                             @click="button=false,editLangue(langue)"><i
                                                 class="fa fa-edit text-success"></i></a>
                                         <a href="#" @click.prevent='idLang=langue.id,deleteLangue(langue)'><i

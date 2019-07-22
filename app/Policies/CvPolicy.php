@@ -55,7 +55,6 @@ class CvPolicy
     public function delete(User $user, Cv $cv)
     {
         return $user->id === $cv->user_id;
-
     }
 
     /**

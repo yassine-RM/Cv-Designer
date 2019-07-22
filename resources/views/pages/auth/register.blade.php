@@ -21,9 +21,9 @@
 
                                     <select value="{{old('Civilite')}}" name="Civilite" id="civilite"
                                         class="form-control">
-                                        <option value="M">M.</option>
-                                        <option value="M">Mme</option>
-                                        <option value="M">Mlle</option>
+                                        <option>M.</option>
+                                        <option>Mme</option>
+                                        <option>Mlle</option>
                                     </select>
 
                                 </div>
@@ -59,11 +59,10 @@
                                             class="etoil">*</span></label>
 
                                     <input type="number" value="{{old('Telephonne')}}" min="0" name="Telephonne"
-                                        
                                         class="form-control @if($errors->get('Telephonne')) is-invalid @endif"
                                         placeholder="Telephonne">
                                     <div class="invalid-feedback " style="color:yellow">
-                                     @if($errors->get('Telephonne')) @foreach ($errors->get('Telephonne') as $error)
+                                        @if($errors->get('Telephonne')) @foreach ($errors->get('Telephonne') as $error)
                                         {{ $error }} @endforeach @endif</div>
                                 </div>
                             </div>
@@ -96,8 +95,8 @@
                                     <input type="date" value="{{old('DateNaissance')}}" name="DateNaissance"
                                         id="DateNaissance "
                                         class="form-control @if($errors->get('DateNaissance')) is-invalid @endif">
-                                    <div class="invalid-feedback " style="color:yellow"> 
-                                    @if ($errors->get('DateNaissance')) @foreach ($errors->get('DateNaissance') as
+                                    <div class="invalid-feedback " style="color:yellow">
+                                        @if ($errors->get('DateNaissance')) @foreach ($errors->get('DateNaissance') as
                                         $error) {{ $error }} @endforeach @endif</div>
                                 </div>
                             </div>
@@ -163,10 +162,17 @@
                                 <div class="form-group">
                                     <label class="text-light" for="Password">Mot de passe <span
                                             class="etoil">*</span></label>
-
-                                    <input type="password" name="Password"
-                                        class="form-control @if($errors->get('Password')) is-invalid @endif"
-                                        placeholder="Password" id="Password">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fa fa-eye" id="cursor" aria-hidden="true"
+                                                    onclick="password()"></i>
+                                            </div>
+                                        </div>
+                                        <input type="password" name="Password" id="myPasse"
+                                            class="form-control @if($errors->get('Password')) is-invalid @endif"
+                                            placeholder="Password" id="Password">
+                                    </div>
                                     <div class="invalid-feedback " style="color:yellow"> @if ($errors->get('Password'))
                                         @foreach ($errors->get('Password') as $error) {{ $error }} @endforeach @endif
                                     </div>
@@ -174,23 +180,33 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="text-light" for="Password_confirmation">Confirmer de passe <span
-                                            class="etoil">*</span></label>
-
-                                    <input type="password" name="Password_confirmation"
-                                        class="form-control @if($errors->get('Password_confirmation')) is-invalid @endif"
-                                        placeholder="password confirmation" id="Password_confirmation">
-                                    <div class="invalid-feedback " style="color:yellow"> @if($errors->get('Password_confirmation')) 
-                                    @foreach($errors->get('Password_confirmation') as $error) {{ $error }} @endforeach
+                                    <label class="text-light" for="Password_confirmation">Confirmer le mot de passe
+                                        <span class="etoil">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fa fa-eye" id="cursor" aria-hidden="true"
+                                                    onclick="passwordRepeat()"></i>
+                                            </div>
+                                        </div>
+                                        <input type="password" name="Password_confirmation" id="myPasseRepeat"
+                                            class="form-control @if($errors->get('Password_confirmation')) is-invalid @endif"
+                                            placeholder="password confirmation" id="Password_confirmation">
+                                    </div>
+                                    <div class="invalid-feedback " style="color:yellow">
+                                        @if($errors->get('Password_confirmation'))
+                                        @foreach($errors->get('Password_confirmation') as $error)
+                                        {{ $error }}
+                                        @endforeach
                                         @endif</div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Crée compte" class="btn btn-block btn-warning ">
+                            <input type="submit" value="Crée compte" class="btn btn-block btn-w btn-sm">
                         </div>
                         <div class="form-group">
-                            <a class="btn btn-info " href="/login"><span class="fa fa-arrow-left "></span>
+                            <a class="btn btn-info btn-sm " href="/login"><span class="fa fa-arrow-left "></span>
                                 S'identifier</a>
                         </div>
 
@@ -201,6 +217,30 @@
         </div>
     </div>
 </div>
+<script>
+    function password(){
+
+    var passe=document.getElementById('myPasse');
+
+    if (passe.type==="password") {
+        passe.type="text"
+    }
+    else
+    passe.type="password"
+
+}
+    function passwordRepeat(){
+
+    var passe=document.getElementById('myPasseRepeat');
+
+    if (passe.type==="password") {
+        passe.type="text"
+    }
+    else
+    passe.type="password"
+
+}
+</script>
 @endsection
 
 
