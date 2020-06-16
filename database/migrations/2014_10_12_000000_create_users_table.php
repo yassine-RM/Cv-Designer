@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('civitite', 100)->nullable()->default('text');
+            $table->string('civilite', 100)->nullable()->default('text');
             $table->string('nom', 100)->nullable()->default('text');
             $table->string('prenom', 100)->nullable()->default('text');
             $table->string('photo', 100)->nullable()->default('text');
