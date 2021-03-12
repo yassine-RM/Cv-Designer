@@ -27,7 +27,7 @@
     "dependencies": {
         "@fortawesome/fontawesome": "^1.1.8",
         "font-awesome": "^4.7.0",
-        "jspdf": "^1.5.3",
+        "jspdf": "^2.3.1",
         "laravel-vue-pagination": "^2.3.0",
         "moment": "^2.24.0",
         "require": "^2.4.20",
